@@ -1,0 +1,7 @@
+{$MONGODB.CONNSTRING}=tcp://localhost:27017
+{$MONGODB.PASSWORD}=example_password
+{$MONGODB.USER}=zbx_monitor
+{$MYSQL.DSN}=tcp://localhost:3306
+{$MYSQL.PASSWORD}=example_password
+{$MYSQL.USER}=zbx_monitor
+{$REDIS.CONN.URI}=RedisServer
