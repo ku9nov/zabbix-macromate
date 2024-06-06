@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -238,7 +238,7 @@ func makeRequest(postBody []byte, zabbixServerLink string) (responseBody []byte,
 	}
 	defer resp.Body.Close()
 
-	responseBody, err = ioutil.ReadAll(resp.Body)
+	responseBody, err = io.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatalf("An Error Occured: %v", err)
 		return nil, err
@@ -248,16 +248,24 @@ func makeRequest(postBody []byte, zabbixServerLink string) (responseBody []byte,
 	return responseBody, nil
 }
 
+var version string
+
 func main() {
 	flag.StringVar(&username, "username", "", "Administrator username")
 	flag.StringVar(&password, "password", "", "Administrator password")
 	flag.StringVar(&hostName, "hostname", "", "Host name")
 	flag.StringVar(&zbxServerLink, "zbxServerLink", "", "Link to zabbix server.")
 	flag.BoolVar(&enableLogging, "enableLogging", false, "Set true to enable logs.")
+	versionFlag := flag.Bool("version", false, "Print the version of the application")
+
 	flag.Parse()
+	if *versionFlag {
+		fmt.Println(version)
+		os.Exit(0)
+	}
 	if !enableLogging {
 		log.SetFlags(0)
-		log.SetOutput(ioutil.Discard)
+		log.SetOutput(io.Discard)
 	}
 	config, err := readConfig(`config.txt`)
 	if err != nil {
